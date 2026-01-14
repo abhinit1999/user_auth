@@ -26,3 +26,26 @@ def verify_jwt(token):
     decoded_jwt = jwt.decode(token,SECRETE_KEY,ALGORITHM)
     return decoded_jwt
 
+
+# Hashing the password
+from passlib.context import CryptContext
+
+password_context = CryptContext(schemes=['bcrypt'],deprecated="auto")
+
+#encrypting the pass
+def hash_password(password:str):
+    return password_context.hash(password)
+
+# veryfing Pass
+def verify_password(plan_password:str,hashed_password):
+    return password_context.verify(plan_password,hashed_password)
+
+
+
+
+
+# steps to create userAuth System
+# 1. User Registration (Sign UP) - userId,password (with validation) - Password would be hashed
+# 2. User Login (Sign In) - UserId, password (JWT + sessionID)
+# 3. Protected Routes - user can only access the API/page only if he is logged in
+
