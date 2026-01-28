@@ -9,7 +9,7 @@ def register_user(username:str, password:str):
     if not check_existing_user:   
 
         # inserting the user records     
-        user_collection.insert_one(user_schema(username,password))
+        user_collection.insert_one(user_schema(username,password).convert_to_dictionary())
         return {"message":"User Created"}
     else:
         return {"message":"User already exists"}

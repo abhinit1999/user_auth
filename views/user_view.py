@@ -3,7 +3,7 @@ from controllers.user_controller import register_user,login_user
 from utils.auth import verify_jwt
 
 
-router = APIRouter
+router = APIRouter()
 
 # auth Dependency - This is to get the current user (returns true or false)
 def get_current_user(request:Request):
@@ -23,6 +23,30 @@ def get_current_user(request:Request):
         return {"error":"invalida or expired token"}
     return user_data
 
+# from fastapi import Request, HTTPException, status
+
+# def get_current_user(request: Request):
+#     # Get JWT token from browser cookies
+#     token = request.cookies.get("session")
+
+#     # if token not found
+#     if not token:
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="User not logged in"
+#         )
+    
+#     # Verifying JWT
+#     user_data = verify_jwt(token)
+
+#     # if token is invalid or expired
+#     if not user_data:
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="Invalid or expired token"
+#         )
+
+#     return user_data
 
 
 # this is for user login and creating the Cookies/session
@@ -51,12 +75,24 @@ def register(username:str,password:str):
 #protected Route
 @router.get("/profile")
 def user_profile(user = Depends(get_current_user)):
+    print(f"current User: {user}")
     if "error" in user:
         return user
-    return {"message":f"welcome to the profile {user["username"]}"}
+    print(f"error")
+    return {"message":f"welcome to the profile {user}"}
+
+# @router.get("/profile")
+# def user_profile(user = Depends(get_current_user)):
+#     print(f"current User: {user}")
+#     return {"message": f"welcome to the profile {user}"}
+
+    
 
 # this is to logging out the user 
 @router.post("/logout")
 def logout(response:Response):
     response.delete_cookie("session")
     return {"message":"logged Out Successfully"}
+
+
+
